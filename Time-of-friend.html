@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador Especial</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fdf6f0;
+      text-align: center;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      margin: 50px auto;
+      padding: 20px;
+      border: 2px solid #f0a1c0;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      background-color: #fff;
+      position: relative;
+    }
+    h1 {
+      color: #f78fb3;
+    }
+    #counter {
+      font-size: 20px;
+      font-weight: bold;
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); color: #333; }
+      100% { transform: scale(1.05); color: #f78fb3; }
+    }
+    .button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .button-primary {
+      background-color: #f78fb3;
+      color: white;
+    }
+    .button-primary:hover {
+      background-color: #f56090;
+      transform: scale(1.1);
+    }
+    .button-green {
+      background-color: #85e085;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .button-green:hover {
+      background-color: #5cbc5c;
+      transform: scale(1.1);
+    }
+    .button-red {
+      background-color: #ff6b6b;
+      color: white;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+    .button-red:hover {
+      background-color: #e05a5a;
+      transform: scale(1.1);
+    }
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+      position: relative;
+    }
+    #noButton {
+      position: absolute;
+      left: 50%; /* Inicialmente centralizado */
+      top: 200px; /* Posição vertical do botão */
+      transform: translateX(-50%); /* Centralização correta */
+    }
+    #yesButton {
+      position: absolute;
+      left: 50%; /* Inicialmente centralizado */
+      top: 200px; /* Posição vertical do botão */
+      transform: translateX(-50%); /* Centralização correta */
+    }
+
+    /* Esticando a caixa para dar mais espaço aos botões */
+    #page2 {
+      padding-bottom: 80px; /* Adiciona mais espaço na parte inferior */
+      min-height: 350px; /* Garante altura mínima para acomodar os botões */
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="page1">
+    <h1>Contador Especial</h1>
+    <p>Tempo desde que conheci você, Chainara:</p>
+    <div id="counter"></div>
+    <button class="button button-primary" onclick="goToPage2()">Clique aqui 😗</button>
+  </div>
+
+  <div class="container" id="page2" style="display: none;">
+    <h1>100 Dias de Amizade</h1>
+    <p>100 dias de risadas, conversas com momentos tristes e felizes.</p>
+    <p>Quer renovar nosso contrato de amizade para 2025? 🧐</p>
+    <div class="buttons-container">
+      <!-- Botão Sim com anotação explicativa -->
+      <button class="button button-green" id="yesButton" onclick="goToPage3()">Sim 🥰</button>
+
+      <!-- Botão Não com anotação explicativa -->
+      <button class="button button-red" id="noButton" onclick="moveNoButton()">Não 🙄</button>
+    </div>
+  </div>
+
+  <div class="container" id="page3" style="display: none;">
+    <h1>Amizade Renovada</h1>
+    <p style="font-style: italic;">E assim, num clique, nosso laço se firmou,  
+       Uma amizade sincera, um sonho que brotou.  
+       100 dias juntos, celebrando a vida,  
+       Com você, amiga, meu coração vibra!  
+       Gratidão por cada instante, cada sorriso,  
+       Nossa história continua, um lindo paraíso.</p>
+  </div>
+
+  <script>
+    const startDate = new Date("August 23, 2024 22:25:00");
+
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - startDate;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("counter").textContent = 
+        `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+    }
+    setInterval(updateCounter, 1000);
+
+    function goToPage2() {
+      document.getElementById("page1").style.display = "none";
+      document.getElementById("page2").style.display = "block";
+    }
+
+    function goToPage3() {
+      document.getElementById("page2").style.display = "none";
+      document.getElementById("page3").style.display = "block";
+    }
+
+    function moveNoButton() {
+      const noButton = document.getElementById("noButton");
+      const container = document.getElementById("page2");
+
+      // Obter dimensões do contêiner e do botão
+      const containerRect = container.getBoundingClientRect();
+      const buttonRect = noButton.getBoundingClientRect();
+
+      // Calcular os limites máximos para a nova posição
+      const maxX = containerRect.width - buttonRect.width - 20; // Ajuste para margem
+      const maxY = containerRect.height - buttonRect.height - 20; // Ajuste para margem
+
+      // Gerar posições aleatórias dentro dos limites
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      // Aplicar novas posições ao botão
+      noButton.style.position = "absolute";
+      noButton.style.left = `${x}px`;
+      noButton.style.top = `${y}px`;
+    }
+  </script>
+</body>
+</html>
